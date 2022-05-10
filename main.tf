@@ -20,6 +20,18 @@ resource "aws_internet_gateway" "internet_gateway" {
   }
 }
 
+# resource "aws_subnet" "subnets" {
+#   for_each = var.network_type
+
+#   vpc_id            = aws_vpc.myvpc.id
+#   availability_zone = data.aws_availability_zones.available.names[0]
+#   cidr_block        = element(each.value, 0)
+#   tags = {
+#     "Name" = "shared-${each.key}-${data.aws_availability_zones.available.names[0]}"
+#   }
+
+# }
+
 resource "aws_subnet" "public_subnets" {
   count             = var.subnet_count_per_network
   vpc_id            = aws_vpc.myvpc.id
@@ -53,6 +65,7 @@ resource "aws_subnet" "internal_subnets" {
   }
 }
 
+#################################################
 resource "aws_route_table" "shared_private_rtbs" {
   count  = var.subnet_count_per_network
   vpc_id = aws_vpc.myvpc.id
